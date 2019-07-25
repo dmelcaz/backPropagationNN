@@ -28,7 +28,7 @@ class NeuralNetwork(object):
 			self.output_act_prime = linear_prime
 		elif output_act == 'softmax':
 			self.output_act = softmax
-			self.output_act_prime = linear_prime
+			self.output_act_prime = softmax_prime
 
 		# Weights initializarion
 		self.wi = np.random.randn(inputs, hidden)/np.sqrt(inputs)
