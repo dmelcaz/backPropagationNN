@@ -4,7 +4,7 @@ from BackPropagationNN import NeuralNetwork
 
 from sklearn import datasets
 from sklearn import preprocessing
-from sklearn import cross_validation
+from sklearn import model_selection
 from sklearn import metrics
 
 def targetToVector(x):
@@ -22,7 +22,7 @@ if __name__ == '__main__':
 	y = targetToVector(digits.target)
 
 	# Cross valitation
-	X_train, X_test, y_train, y_test = cross_validation.train_test_split(X, y, test_size=0.2, random_state=0)
+	X_train, X_test, y_train, y_test = model_selection.train_test_split(X, y, test_size=0.2, random_state=0)
 	
 	# Neural Network initialization
 	NN = NeuralNetwork(64,60,10, output_act = 'softmax')
