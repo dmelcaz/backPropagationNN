@@ -131,45 +131,45 @@ class NeuralNetwork(object):
         return y
 
 
-# Activation functions
+# Sigmoid activation functions
 def sigmoid(x):
     return 1.0 / (1.0 + np.exp(-x))
-
 
 def sigmoid_prime(x):
     return x * (1.0 - x)
 
 
+# Tanh activation functions
 def tanh(x):
     return np.tanh(x)
-
 
 def tanh_prime(x):
     return 1.0 - x**2
 
 
+# ReLu activation functions
 def relu(x):
     return np.maximum(0, x)
 
 def relu_prime(x):
     return (x > 0).astype(x.dtype)
 
+
+# Softmax activation functions
 def softmax(x):
     return np.exp(np.array(x)) / np.sum(np.exp(np.array(x)))
-
 
 def softmax_jacobian(s):
     s = np.array(s)
     return np.diag(s) - np.outer(s, s)
 
-
 def softmax_prime(x):
     return softmax_jacobian(softmax(x))
 
 
+# Linear activation functions
 def linear(x):
     return x
-
 
 def linear_prime(x):
     return 1
