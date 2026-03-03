@@ -1,3 +1,4 @@
+import argparse
 import numpy as np
 
 from sklearn import datasets
@@ -17,6 +18,13 @@ def target_to_vector(x):
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='BackPropagationNN demo')
+    parser.add_argument(
+        '--activation', default='tanh',
+        choices=['sigmoid', 'tanh', 'relu', 'linear'],
+        help='Hidden layer activation function'
+    )
+    args = parser.parse_args()
 
     # Digits dataset loading
     digits = datasets.load_digits()
@@ -29,7 +37,7 @@ if __name__ == '__main__':
     )
 
     # Neural Network initialization
-    nn = NeuralNetwork(64, 60, 10, output_act='softmax')
+    nn = NeuralNetwork(64, 60, 10, activation=args.activation, output_act='softmax')
     nn.fit(
         x_train, y_train, epochs=50, learning_rate=0.1,
         learning_rate_decay=0.01, verbose=1

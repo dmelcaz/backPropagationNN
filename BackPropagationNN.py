@@ -14,6 +14,9 @@ class NeuralNetwork(object):
         elif activation == 'tanh':
             self.activation = tanh
             self.activation_prime = tanh_prime
+        elif activation == 'relu':
+            self.activation = relu
+            self.activation_prime = relu_prime
         elif activation == 'linear':
             self.activation = linear
             self.activation_prime = linear_prime
@@ -25,6 +28,9 @@ class NeuralNetwork(object):
         elif output_act == 'tanh':
             self.output_act = tanh
             self.output_act_prime = tanh_prime
+        elif output_act == 'relu':
+            self.output_act = relu
+            self.output_act_prime = relu_prime
         elif output_act == 'linear':
             self.output_act = linear
             self.output_act_prime = linear_prime
@@ -141,6 +147,12 @@ def tanh(x):
 def tanh_prime(x):
     return 1.0 - x**2
 
+
+def relu(x):
+    return np.maximum(0, x)
+
+def relu_prime(x):
+    return (x > 0).astype(x.dtype)
 
 def softmax(x):
     return np.exp(np.array(x)) / np.sum(np.exp(np.array(x)))
