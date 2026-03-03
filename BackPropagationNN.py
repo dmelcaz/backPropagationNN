@@ -74,8 +74,11 @@ class NeuralNetwork(object):
 				# Output activation
 				ao = self.output_act(np.dot(ah, self.wo))
 
-				# Deltas	
-				deltao = np.multiply(self.output_act_prime(ao),y[i] - ao)
+				# Deltas
+				if self.output_act == softmax:
+					deltao = np.dot(softmax_jacobian(ao), (y[i] - ao))
+				else:
+					deltao = np.multiply(self.output_act_prime(ao),y[i] - ao)
 				deltai = np.multiply(self.activation_prime(ah),np.dot(self.wo, deltao))
 
 				# Weights update with momentum
@@ -88,7 +91,7 @@ class NeuralNetwork(object):
 
 			# Print training status
 			if verbose == 1:
-				print 'EPOCH: {0:4d}/{1:4d}\t\tLearning rate: {2:4f}\t\tElapse time [seconds]: {3:5f}'.format(k,epochs,learning_rate, time.time() - startTime)
+				print('EPOCH: {0:4d}/{1:4d}\t\tLearning rate: {2:4f}\t\tElapse time [seconds]: {3:5f}'.format(k,epochs,learning_rate, time.time() - startTime))
 				
 			# Learning rate update
 			learning_rate = learning_rate * (1 - learning_rate_decay)
@@ -123,8 +126,12 @@ def tanh_prime(x):
 def softmax(x):
     return (np.exp(np.array(x)) / np.sum(np.exp(np.array(x))))
 
+def softmax_jacobian(s):
+	s = np.array(s)
+	return np.diag(s) - np.outer(s, s)
+
 def softmax_prime(x):
-    return softmax(x)*(1.0-softmax(x))
+	return softmax_jacobian(softmax(x))
 
 def linear(x):
 	return x
