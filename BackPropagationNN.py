@@ -67,23 +67,23 @@ class NeuralNetwork(object):
 
 				# Hidden layer activation
 				ah = self.activation(np.dot(X[i], self.wi))
-			
+
 				# Adding bias to the hidden layer
-				ah = np.concatenate((np.ones(1).T, np.array(ah))) 
+				ah_bias = np.concatenate((np.ones(1).T, np.array(ah))) 
 
 				# Output activation
-				ao = self.output_act(np.dot(ah, self.wo))
+				ao = self.output_act(np.dot(ah_bias, self.wo))
 
 				# Deltas
 				if self.output_act == softmax:
 					deltao = np.dot(softmax_jacobian(ao), (y[i] - ao))
 				else:
 					deltao = np.multiply(self.output_act_prime(ao),y[i] - ao)
-				deltai = np.multiply(self.activation_prime(ah),np.dot(self.wo, deltao))
+				deltai = np.multiply(self.activation_prime(ah),np.dot(self.wo[1:], deltao))
 
 				# Weights update with momentum
-				self.updateo = momentum*self.updateo + np.multiply(learning_rate, np.outer(ah,deltao))
-				self.updatei = momentum*self.updatei + np.multiply(learning_rate, np.outer(X[i],deltai[1:]))
+				self.updateo = momentum*self.updateo + np.multiply(learning_rate, np.outer(ah_bias,deltao))
+				self.updatei = momentum*self.updatei + np.multiply(learning_rate, np.outer(X[i],deltai))
 
 				# Weights update
 				self.wo += self.updateo
@@ -115,7 +115,7 @@ def sigmoid(x):
 	return 1.0/(1.0 + np.exp(-x))
 
 def sigmoid_prime(x):
-	return sigmoid(x)*(1.0-sigmoid(x))
+	return x*(1.0-x)
 
 def tanh(x):
 	return np.tanh(x)
